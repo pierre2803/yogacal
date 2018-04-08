@@ -1,0 +1,8 @@
+
+Idolem:
+https://clients.mindbodyonline.com/classic/mainclass?studioid=7425&date=4%2f18%2f2018
+curl -o "idolem.gz" https://clients.mindbodyonline.com/classic/mainclass?studioid=7425&date=4%2f18%2f2018
+
+Wanderlust
+https://widgets.healcode.com/widgets/schedules/3345098fcf5/print?options%5Bstart_date%5D=2018-04-06
+curl -o "wanderlust.txt" https://widgets.healcode.com/widgets/schedules/3345098fcf5/print?options%5Bstart_date%5D=2018-04-06
