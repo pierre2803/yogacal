@@ -1,16 +1,24 @@
 package com.pierre2803.yogacal.domain;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.Setter;
 import org.jsoup.helper.Validate;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
 
+@EqualsAndHashCode
 public class YogaClass {
 
-    LocalDateTime startTime;
-    LocalDateTime endTime;
-    String classType;
-    String instructor;
+    @Getter @Setter @NonNull
+    private LocalDateTime startTime;
+    @Getter @Setter @NonNull
+    private LocalDateTime endTime;
+    @Getter @Setter @NonNull
+    private String classType;
+    @Getter @Setter @NonNull
+    private String instructor;
 
     public YogaClass(final LocalDateTime startTime, final LocalDateTime endTime, final String classType, final String instructor){
         Validate.notNull(startTime);
@@ -23,7 +31,7 @@ public class YogaClass {
         this.instructor = instructor;
     }
 
-    public boolean equals(Object obj) {
+    /*public boolean equals(Object obj) {
         if (this == obj) {
             return true;
         }
@@ -40,6 +48,6 @@ public class YogaClass {
 
     public int hashCode() {
         return Objects.hash(startTime, endTime, classType, instructor);
-    }
+    }*/
 
 }

@@ -17,7 +17,6 @@ public class YogaClassesTest {
     YogaClass yogaClass1;
     YogaClass yogaClass2;
 
-
     @Before
     public void setUp() {
         yogaClasses = new YogaClasses();
@@ -37,7 +36,7 @@ public class YogaClassesTest {
         // Then
         assertEquals(yogaClasses.size(),1);
         assertTrue(yogaClass.isPresent());
-        assertEquals(yogaClass.get().instructor,"Jenny K");
+        assertEquals(yogaClass.get().getInstructor(),"Jenny K");
     }
 
     @Test
@@ -51,6 +50,6 @@ public class YogaClassesTest {
         // Then
         assertEquals(yogaClasses.size(),1);
         assertTrue(yogaClass.isPresent());
-        assertEquals(yogaClass.get().instructor,"Dave M");
+        assertEquals(yogaClass.get().getInstructor(),"Dave M");
     }
 }
