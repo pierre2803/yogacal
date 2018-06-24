@@ -1,0 +1,27 @@
+project:
+  name: "YogaCal-service"
+
+
+parser:
+  wanderlust:
+    baseUrl: "https://widgets.healcode.com/widgets/schedules/3345098fcf5/print?options%5Bstart_date%5D="
+    cron: 0 0 0 * * ?     # Every day at 12 am GMT
+
+swagger:
+    service:
+        version: "1.0"
+        title: ${project.name}
+        description: ""
+        termsPath: ""
+        email: "pjmbusnel@gmail.com"
+        licenceType: ""
+        licencePath: "#"
+        protocol: "https"
+
+
+server:
+  port: 8080
+  tomcat:
+      max-threads: 5
+
+
