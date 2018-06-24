@@ -29,8 +29,7 @@ public class YogaCalendar {
     }
 
     private void addEvent(YogaClass yogaClass) {
-        VEvent christmas = new VEvent(new Date(cal.getTime()), "Christmas Day");
-        this.calendar.
+        //...
     }
 
     public void clearCalendar(){
