@@ -1,11 +1,14 @@
 package com.pierre2803.yogacal.service;
 
+import com.pierre2803.yogacal.domain.YogaClass;
+import com.pierre2803.yogacal.domain.YogaClasses;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 
@@ -23,6 +26,9 @@ public class WanderlustService implements StudioService{
     @Value("${parser.wanderlust.baseUrl}")
     String baseUrl;
 
+    YogaClasses yogaClasses;
+
+    @Override
     @Scheduled(cron = "${parser.wanderlust.cron}")
     public void loadSchedule (){
         String url = getUrl();
@@ -36,19 +42,20 @@ public class WanderlustService implements StudioService{
         }
     }
 
-    public void parseSchedule(Document doc) {
-        String title = doc.title();
-        LOGGER.info("Loading schedule from " + title);
-        Elements tableLines = doc.body().select("table").select("tr");
+    @Override
+    public YogaClasses parseSchedule(Document doc) {
+        LOGGER.info("Loading schedule from " + doc.title());
+        Elements tableLines = doc.body().select("tr.DropIn");
+        yogaClasses = new YogaClasses();
         for(Element element : tableLines){
-            if (element.attributes().get("class").contains("DropIn")) {
-                LocalDateTime startTime = getDateTime(element.selectFirst("span.hc_starttime"));
-                LocalDateTime endTime = getDateTime(element.selectFirst("span.hc_endtime"));
-                String classType = element.selectFirst("span.classname").text();
-                String trainer = getTrainerName(element.selectFirst("span.trainer").text());
-                LOGGER.info("Found Class " + classType + " From " + startTime + " to " + endTime + " with " + trainer);
-            }
+            YogaClass yogaClass = new YogaClass(getDateTime(element.selectFirst("span.hc_starttime")),
+                    getDateTime(element.selectFirst("span.hc_endtime")),
+                    element.selectFirst("span.classname").text(),
+                    getTrainerName(element.selectFirst("span.trainer").text()));
+            yogaClasses.add(yogaClass);
+            LOGGER.info("Found Class " + yogaClass);
         }
+        return yogaClasses;
     }
 
     private String getTrainerName(String trainer) {

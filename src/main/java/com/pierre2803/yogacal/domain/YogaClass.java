@@ -1,14 +1,12 @@
 package com.pierre2803.yogacal.domain;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.Setter;
+import lombok.*;
 import org.jsoup.helper.Validate;
 
 import java.time.LocalDateTime;
 
 @EqualsAndHashCode
+@ToString
 public class YogaClass {
 
     @Getter @Setter @NonNull

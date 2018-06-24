@@ -2,6 +2,8 @@ package com.pierre2803.yogacal.domain;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.InjectMocks;
+import org.mockito.MockitoAnnotations;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -13,13 +15,15 @@ import static org.junit.Assert.assertTrue;
 
 public class YogaClassesTest {
 
+    @InjectMocks
     YogaClasses yogaClasses;
+
     YogaClass yogaClass1;
     YogaClass yogaClass2;
 
     @Before
     public void setUp() {
-        yogaClasses = new YogaClasses();
+        MockitoAnnotations.initMocks(this);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX", Locale.ENGLISH);
         LocalDateTime startTime = LocalDateTime.parse("2018-06-02T08:30:00.000+00:00", formatter);
         LocalDateTime endTime = LocalDateTime.parse("2018-06-02T09:30:00.000+00:00", formatter);
