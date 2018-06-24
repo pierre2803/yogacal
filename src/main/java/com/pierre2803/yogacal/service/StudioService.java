@@ -5,7 +5,9 @@ import org.jsoup.nodes.Document;
 
 public interface StudioService {
 
-    void loadSchedule ();
+    void loadSchedule();
 
     YogaClasses parseSchedule(Document doc);
+
+    void writeCalendar();
 }
