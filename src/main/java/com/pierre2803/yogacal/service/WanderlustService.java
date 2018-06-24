@@ -58,7 +58,7 @@ public class WanderlustService implements StudioService{
             return trainer.trim();
     }
 
-    private LocalDateTime getDateTime(Element e) {
+    protected LocalDateTime getDateTime(Element e) {
         String dateStr = e.attributes().get("data-datetime").replace("\"", "");
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX", Locale.ENGLISH);
         return LocalDateTime.parse(dateStr, formatter);
@@ -68,7 +68,7 @@ public class WanderlustService implements StudioService{
         return this.baseUrl + getDate("yyyy-MM-dd");
     }
 
-    public String getDate(String format) {
+    private String getDate(String format) {
         DateFormat dateFormat = new SimpleDateFormat(format);
         Date date = new Date();
         return dateFormat.format(date);
