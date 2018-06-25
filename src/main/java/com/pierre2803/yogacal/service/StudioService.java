@@ -7,7 +7,7 @@ public interface StudioService {
 
     void loadSchedule();
 
-    YogaClasses parseSchedule(Document doc);
+    YogaClasses parseSchedule(Document htmlDocument);
 
-    void writeCalendar();
+    void writeCalendar(YogaClasses yogaClasses);
 }

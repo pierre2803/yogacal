@@ -1,5 +1,6 @@
 package com.pierre2803.yogacal.service;
 
+import com.pierre2803.yogacal.domain.YogaCalendar;
 import com.pierre2803.yogacal.domain.YogaClass;
 import com.pierre2803.yogacal.domain.YogaClasses;
 import org.jsoup.Jsoup;
@@ -23,9 +24,7 @@ public class WanderlustService implements StudioService{
     private static final Logger LOGGER = LoggerFactory.getLogger(WanderlustService.class);
 
     @Value("${parser.wanderlust.baseUrl}")
-    String baseUrl;
-
-    YogaClasses yogaClasses;
+    private String baseUrl;
 
     @Override
     @Scheduled(cron = "${parser.wanderlust.cron}")
@@ -33,8 +32,10 @@ public class WanderlustService implements StudioService{
         String url = getUrl();
         LOGGER.info("Loading " + url);
         try {
-            Document doc = Jsoup.connect(url).get();
-            parseSchedule(doc);
+            Document htmlDocument = Jsoup.connect(url).get();
+            YogaClasses yogaClasses = parseSchedule(htmlDocument);
+            writeCalendar(yogaClasses);
+
         } catch (IOException e) {
             LOGGER.info("Error while loading " + url);
             e.printStackTrace();
@@ -42,10 +43,10 @@ public class WanderlustService implements StudioService{
     }
 
     @Override
-    public YogaClasses parseSchedule(Document doc) {
-        LOGGER.info("Loading schedule from " + doc.title());
-        Elements tableLines = doc.body().select("tr.DropIn");
-        yogaClasses = new YogaClasses();
+    public YogaClasses parseSchedule(Document htmlDocument) {
+        LOGGER.info("Loading schedule from " + htmlDocument.title());
+        Elements tableLines = htmlDocument.body().select("tr.DropIn");
+        YogaClasses yogaClasses = new YogaClasses();
         for(Element element : tableLines){
             YogaClass yogaClass = new YogaClass(getDateTime(element.selectFirst("span.hc_starttime")),
                     getDateTime(element.selectFirst("span.hc_endtime")),
@@ -58,8 +59,11 @@ public class WanderlustService implements StudioService{
     }
 
     @Override
-    public void writeCalendar() {
+    public void writeCalendar(YogaClasses yogaClasses) {
         // write ICS
+        YogaCalendar cal = new YogaCalendar();
+        cal.addYogaClasses(yogaClasses);
+        cal.writeToFile("src/main/resources/yogalCal.ics");
     }
 
     private String getTrainerName(String trainer) {
