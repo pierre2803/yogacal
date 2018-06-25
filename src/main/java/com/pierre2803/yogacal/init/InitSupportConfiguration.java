@@ -21,7 +21,7 @@ public class InitSupportConfiguration {
         return new YogaClasses();
     }
 
-    @Scheduled(cron = "${parser.wanderlust.cron}")
+    @Scheduled(cron = "${parser.yogacal.cron}")
     public void loadSchedule() {
         wanderlustService().loadSchedule();
     }

@@ -10,7 +10,6 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Scheduled;
 
 import java.io.IOException;
 import java.text.DateFormat;
@@ -26,8 +25,10 @@ public class WanderlustService implements StudioService{
     @Value("${parser.wanderlust.baseUrl}")
     private String baseUrl;
 
+    @Value("${parser.wanderlust.icsfilename}")
+    private String icsfilename;
+
     @Override
-    @Scheduled(cron = "${parser.wanderlust.cron}")
     public void loadSchedule (){
         String url = getUrl();
         LOGGER.info("Loading " + url);
@@ -48,22 +49,23 @@ public class WanderlustService implements StudioService{
         Elements tableLines = htmlDocument.body().select("tr.DropIn");
         YogaClasses yogaClasses = new YogaClasses();
         for(Element element : tableLines){
-            YogaClass yogaClass = new YogaClass(getDateTime(element.selectFirst("span.hc_starttime")),
-                    getDateTime(element.selectFirst("span.hc_endtime")),
-                    element.selectFirst("span.classname").text(),
-                    getTrainerName(element.selectFirst("span.trainer").text()));
-            yogaClasses.add(yogaClass);
+            YogaClass yogaClass = new YogaClass.Builder()
+                    .withStartTime(getDateTime(element.selectFirst("span.hc_starttime")))
+                    .withEndTime(getDateTime(element.selectFirst("span.hc_endtime")))
+                    .withClassType(element.selectFirst("span.classname").text())
+                    .withInstructor(getTrainerName(element.selectFirst("span.trainer").text()))
+                    .build();
             LOGGER.info("Found Class " + yogaClass);
+            yogaClasses.add(yogaClass);
         }
         return yogaClasses;
     }
 
     @Override
     public void writeCalendar(YogaClasses yogaClasses) {
-        // write ICS
         YogaCalendar cal = new YogaCalendar();
         cal.addYogaClasses(yogaClasses);
-        cal.writeToFile("src/main/resources/yogalCal.ics");
+        cal.writeToFile(icsfilename);
     }
 
     private String getTrainerName(String trainer) {

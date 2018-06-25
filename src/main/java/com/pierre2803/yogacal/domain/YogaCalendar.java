@@ -67,37 +67,29 @@ public class YogaCalendar {
     }
 
     private void addEvent(YogaClass yogaClass) {
-
-        LocalDateTime start = yogaClass.getStartTime();
-        java.util.Calendar startCal = java.util.Calendar.getInstance();
-        startCal.set(java.util.Calendar.YEAR, start.getYear());
-        startCal.set(java.util.Calendar.MONTH, start.getMonth().getValue()-1);
-        startCal.set(java.util.Calendar.DAY_OF_MONTH, start.getDayOfMonth());
-        startCal.set(java.util.Calendar.HOUR_OF_DAY, start.getHour());
-        startCal.set(java.util.Calendar.MINUTE, start.getMinute());
-        startCal.clear(java.util.Calendar.SECOND);
-
-        LocalDateTime end = yogaClass.getEndTime();
-        java.util.Calendar endCal = java.util.Calendar.getInstance();
-        endCal.set(java.util.Calendar.YEAR, end.getYear());
-        endCal.set(java.util.Calendar.MONTH, end.getMonth().getValue()-1);
-        endCal.set(java.util.Calendar.DAY_OF_MONTH, end.getDayOfMonth());
-        endCal.set(java.util.Calendar.HOUR_OF_DAY, end.getHour());
-        endCal.set(java.util.Calendar.MINUTE, end.getMinute());
-        endCal.clear(java.util.Calendar.SECOND);
-
-        net.fortuna.ical4j.model.DateTime dtStart = new DateTime(startCal.getTime());
-        dtStart.setUtc(true);
-
-        net.fortuna.ical4j.model.DateTime dtEnd = new DateTime (endCal.getTime());
-        dtEnd.setUtc(true);
-
-        VEvent event = new VEvent(dtStart,dtEnd, yogaClass.getClassType()+" ("+yogaClass.getInstructor()+")");
+        VEvent event = new VEvent(
+                getDateTime(yogaClass.getStartTime()),
+                getDateTime(yogaClass.getEndTime()),
+                yogaClass.getClassType()+" ("+yogaClass.getInstructor()+")");
 
         // generate UID
         event.getProperties().add(uidGenerator.generateUid());
 
         this.calendar.getComponents().add(event);
+        this.LOGGER.info("Adding class " + yogaClass );
+    }
+
+    public static DateTime getDateTime(LocalDateTime localDateTime){
+        java.util.Calendar calDateTime = java.util.Calendar.getInstance();
+        calDateTime.set(java.util.Calendar.YEAR, localDateTime.getYear());
+        calDateTime.set(java.util.Calendar.MONTH, localDateTime.getMonth().getValue()-1);
+        calDateTime.set(java.util.Calendar.DAY_OF_MONTH, localDateTime.getDayOfMonth());
+        calDateTime.set(java.util.Calendar.HOUR_OF_DAY, localDateTime.getHour());
+        calDateTime.set(java.util.Calendar.MINUTE, localDateTime.getMinute());
+        calDateTime.clear(java.util.Calendar.SECOND);
+        DateTime eventDateTime =  new DateTime(calDateTime.getTime());
+        eventDateTime.setUtc(true);
+        return eventDateTime;
     }
 
 }

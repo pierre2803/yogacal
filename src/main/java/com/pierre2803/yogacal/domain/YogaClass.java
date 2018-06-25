@@ -48,44 +48,36 @@ public class YogaClass {
         return Objects.hash(startTime, endTime, classType, instructor);
     }*/
 
-    public static class YogaClassBuilder
+    public static class Builder
     {
         private LocalDateTime nestedStartTime;
         private LocalDateTime nestedEndTime;
         private String nestedClassType;
         private String nestedInstructor;
 
-        public YogaClassBuilder(final LocalDateTime nestedStartTime,
-                                final LocalDateTime nestedEndTime,
-                                final String nestedClassType,
-                                final String nestedInstructor){
-            this.nestedStartTime = nestedStartTime;
-            this.nestedEndTime = nestedEndTime;
-            this.nestedClassType = nestedClassType;
-            this.nestedInstructor = nestedInstructor;
-        }
+        public Builder(){}
 
-        public YogaClassBuilder withStartTime(LocalDateTime startTime){
+        public Builder withStartTime(LocalDateTime startTime){
             this.nestedStartTime = startTime;
             return this;
         }
 
-        public YogaClassBuilder withEndTime(LocalDateTime endTime){
+        public Builder withEndTime(LocalDateTime endTime){
             this.nestedEndTime = endTime;
             return this;
         }
 
-        public YogaClassBuilder withClassType(String classType){
+        public Builder withClassType(String classType){
             this.nestedClassType = classType;
             return this;
         }
 
-        public YogaClassBuilder withInstructor(String instructor){
+        public Builder withInstructor(String instructor){
             this.nestedInstructor = instructor;
             return this;
         }
 
-        public YogaClass createYogaClass(){
+        public YogaClass build(){
             return new YogaClass(nestedStartTime, nestedEndTime, nestedClassType, nestedInstructor);
         }
     }
