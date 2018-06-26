@@ -5,17 +5,12 @@ import org.jsoup.helper.Validate;
 
 import java.time.LocalDateTime;
 
-@EqualsAndHashCode
-@ToString
+@Data
 public class YogaClass {
 
-    @Getter @Setter @NonNull
     private LocalDateTime startTime;
-    @Getter @Setter @NonNull
     private LocalDateTime endTime;
-    @Getter @Setter @NonNull
     private String classType;
-    @Getter @Setter @NonNull
     private String instructor;
 
     public YogaClass(final LocalDateTime startTime, final LocalDateTime endTime, final String classType, final String instructor){
